@@ -7,5 +7,34 @@ Stefano Allesina and Mercedes Pascual
 -stability is highly robust to pertubations of interaction strength
 -changes in smaller loops casades into whole network
 
--
+- basically redid the expirment from may but with small changes account for possible errors
+-created graphs comparing the results using original forumla, only using predator- prey interactions, eigenvalues, 
+-also randomizing interaction strengths but preserving the sign structure of original matrix
 
+-these results indicate that predator-prey relationships increase the probability of a system being stable
+-a stable system is likely to remain stable under randomization of interaction strengths(QSS)
+- emphasize the importance of sign pattern in food webs
+
+
+Green vs Brown food web
+Cordone, Salinas, Marina, Doyle, Pasotti, Saravia, y Momo
+
+Study in potter cove
+-important to understand structure, dynamics and stability of communities
+-green food web is based on energy obatined from plants or algae
+-brown food web is based on the consumption of decaying biomass by detritivores
+-brown food webs are hypothesized to be more stable
+
+Connectance: C is a standard food web measure that reveals the proportion of real interactions among possible ones. It is considered as an estimator of community sensitivity to perturbations and it strongly covaries with many network properties.
+Quasi sign-stability: QSS is the proportion of community matrices that are locally stable preserving the sign structure. It is directly related to network local stability, which can reveal the amplification or not of small perturbations near the equilibrium point. QSS ranges from 0 to 1 indicating a more stable food web when it is closer to 1.
+Modularity: Mod reflects how strongly sub-groups of species interact with each other compared to species from other sub-groups. A high value promotes stability by preventing the spread of perturbations across sub-groups.
+
+habitat type is an important aspect for the understanding of food-web structure
+
+
+Will a large complex system be stable
+Robert M May
+
+-object is to clarify the reltion between stability and complexity in ecolgical systems
+-Gardner and Ashby's conncectance, C which expresses the probability that any pair of species will interact
+-models will do better if the interactions tend to be arranged in "blocks" 
