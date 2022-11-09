@@ -18,4 +18,12 @@ iglist <- mapply(graph_from_data_frame, d=foodWebList, directed=TRUE)
 igmulti <- multiweb::netData
 igcomplete <- c(iglist, igmulti)
 
-connectanceList <- igcomplete[1]...length()
+
+plot_troph_level(igcomplete[[1]])
+datalist <- calc_topological_indices(igcomplete)
+
+tic()
+calc_QSS(igcomplete[1:2], nsim = 1000)
+toc()
+
+
