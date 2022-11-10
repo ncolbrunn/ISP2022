@@ -1,6 +1,13 @@
-load("ISP2022/data/igcomplete.rda")
+# Cargar datos
+load("../data/igcomplete.rda")
 igcomplete
 
+# Cargar paquetes
 require(multiweb)
 
-qssValues <- multiweb::calc_QSS(igcomplete, nsim = 1000)
+# Correr análisis
+qssValues <- multiweb::calc_QSS(igcomplete, nsim = 1000, ncores = 8, 
+                                istrength = FALSE, returnRaw = FALSE)
+
+# Guardar resultados
+save(qssValues, file = "qssResults.rda")
