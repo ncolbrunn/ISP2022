@@ -4,3 +4,5 @@ Creó una lista de iGraph con todos los consumidores y recursos de ambas bases d
 9/11
 Tomé notas de artículos anteriores que investigaron este tema. También planeamos la aplicación interactiva
 
+10/11
+Creé una lista con latitud, longitud, nombre de la red, tamaño y número de conexiones de todas las redes. Con esto hice un mapa con un punto para cada red.
