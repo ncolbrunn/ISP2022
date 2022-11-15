@@ -10,11 +10,13 @@ library(measurements)
 dat <- read.csv("283_3_283_2_FoodWebDataBase_2018_12_10.csv", header = TRUE, na.strings="NA")
 foodWebDF <- dat %>% 
   dplyr::select(res.taxonomy, con.taxonomy, foodweb.name, longitude, latitude, ecosystem.type, study.site) %>% 
-  dplyr::filter(!foodweb.name == "Carpinteria") %>%
-  dplyr::filter(!foodweb.name == "Weddell Sea")
+  dplyr::filter(!foodweb.name == "Carpinteria" ) %>%
+  dplyr::filter(!foodweb.name == "Weddell Sea" )
+
 
 #remove duplicated foodwebs
 foodWebDF["ecosystem.type"][foodWebDF["study.site"] == "Grand Caricaie"] <- "terrestrial aboveground"
+foodWebDF["foodweb.name"][foodWebDF["foodweb.name"] == "Caribbean Reef"] <- "Caribbean Reef Small"
 
 #Split duplicated network and create distinct foodweb names
 carp_mar <- dat %>% 
@@ -30,13 +32,12 @@ carp_ter$foodweb.name <- "Carpinteria Terrestrial"
 #merge dataframes
 foodWebDF_up <- rbind(foodWebDF, carp_mar)
 foodWebDF <- rbind(foodWebDF_up, carp_ter)
-#foodWebList <- foodWebList[-c(281)]
 
 #split into lists based on foodweb name
 datrescon <- foodWebDF %>% 
   dplyr::select(res.taxonomy, con.taxonomy, foodweb.name)
 foodWebList <- split( datrescon , datrescon$foodweb.name )
-#foodWebList <- foodWebList[-c(281)]
+
 
 #combine iGraph data
 iglist <- mapply(graph_from_data_frame, d=foodWebList, directed=TRUE)
@@ -57,6 +58,7 @@ foodWebLocation1 <- foodWebDF %>%
   dplyr::select(Longitude, Latitude, Network, Ecosystem)
 foodWebLocation2 <- multiweb::metadata %>%
   dplyr::select(c(Longitude, Latitude, Network))
+foodWebLocation2["Longitude"][foodWebLocation2["Network"] == "Caribbean Reef"] <- "-66 39 52.2468"
 foodWebLocation2$Longitude = (measurements::conv_unit(foodWebLocation2$Longitude, from = 'deg_min_sec', to = 'dec_deg') )
 foodWebLocation2$Latitude = (measurements::conv_unit(foodWebLocation2$Latitude, from = 'deg_min_sec', to = 'dec_deg') )
 foodWebLocation2$Ecosystem <- "Marino"
@@ -70,11 +72,12 @@ uniqueLocations$popup_text <- paste0("<center>",  "</br><b>", uniqueLocations$Ne
 
 plot_troph_level(igcomplete[[290]])
 
-
-#tic()
-#calc_QSS(igcomplete[1:2], nsim = 1000)
-#toc()
+# tic()
+# calc_QSS(igcomplete[290], nsim = 1000)
+# toc()
 
 #load(file = "~/ISP/ISP2022/R/qssResults.rda")
 #qssResults
+
+#save(igcomplete, file="igcomplete.rda")
 
