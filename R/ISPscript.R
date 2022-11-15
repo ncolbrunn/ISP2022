@@ -70,7 +70,7 @@ uniqueLocations$Size <- datalist$Size
 uniqueLocations$Interactions <- datalist$Links
 uniqueLocations$popup_text <- paste0("<center>",  "</br><b>", uniqueLocations$Network,  "</br><b></br><b>Tipo de ecosystema</b>: ", uniqueLocations$Ecosystem, "</br><b>Numero de especies</b>: ", uniqueLocations$Size,  "</br><b>Numero de interacciones</b>: ", uniqueLocations$Interactions,"</center>")
 
-plot_troph_level(igcomplete[[290]])
+#plot_troph_level(igcomplete[[290]])
 
 # tic()
 # calc_QSS(igcomplete[290], nsim = 1000)
