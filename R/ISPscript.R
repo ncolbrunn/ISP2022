@@ -6,15 +6,12 @@ library(dplyr)
 library(leaflet)
 library(measurements)
 
-#prepare to convert dataFrame into iGraph
+#Setup first database as dataframe and format
 dat <- read.csv("283_3_283_2_FoodWebDataBase_2018_12_10.csv", header = TRUE, na.strings="NA")
 foodWebDF <- dat %>% 
   dplyr::select(res.taxonomy, con.taxonomy, foodweb.name, longitude, latitude, ecosystem.type, study.site) %>% 
   dplyr::filter(!foodweb.name == "Carpinteria" ) %>%
   dplyr::filter(!foodweb.name == "Weddell Sea" )
-
-
-#remove duplicated foodwebs
 foodWebDF["ecosystem.type"][foodWebDF["study.site"] == "Grand Caricaie"] <- "terrestrial aboveground"
 foodWebDF["foodweb.name"][foodWebDF["foodweb.name"] == "Caribbean Reef"] <- "Caribbean Reef Small"
 
@@ -44,7 +41,7 @@ iglist <- mapply(graph_from_data_frame, d=foodWebList, directed=TRUE)
 igmulti <- multiweb::netData
 igcomplete <- c(iglist, igmulti)
 
-#combine df data
+#Merge dataframes and format
 colnames(foodWebDF)[4] <- "Longitude"
 colnames(foodWebDF)[5] <- "Latitude"
 colnames(foodWebDF)[3] <- "Network"
@@ -68,7 +65,7 @@ uniqueLocations <- (rbind(distinct(foodWebLocation1), distinct(foodWebLocation2)
   mutate_at(vars(Longitude,Latitude), as.numeric)
 uniqueLocations$Size <- datalist$Size
 uniqueLocations$Interactions <- datalist$Links
-uniqueLocations$popup_text <- paste0("<center>",  "</br><b>", uniqueLocations$Network,  "</br><b></br><b>Tipo de ecosystema</b>: ", uniqueLocations$Ecosystem, "</br><b>Numero de especies</b>: ", uniqueLocations$Size,  "</br><b>Numero de interacciones</b>: ", uniqueLocations$Interactions,"</center>")
+uniqueLocations$popup_text <- paste0("<center><b>", uniqueLocations$Network,  "</b></br>", uniqueLocations$Ecosystem, "</center>")
 
 #plot_troph_level(igcomplete[[290]])
 
