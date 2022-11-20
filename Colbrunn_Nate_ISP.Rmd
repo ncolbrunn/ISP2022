@@ -1,0 +1,80 @@
+---
+title: "Title"
+subtitle: "Subtitle"
+author: "Nate Colbrunn, Tomàs Marino"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Resumen
+
+summary of paper, one or two paragraphs in english and spanish
+background objective hypothesis important results
+
+## Introdución
+
+relevant background info importance of work map of networks question/
+hypothesis general approach of study contextualized based on other
+scientist/ papers (extensive literature review) study question and
+hypothesis are relevant objective of study are clearly presented
+
+## Métodos
+
+explanation of methodology is clear, statistical analysis of data graphs
+/ tables Lines of code so anyone can replicate? Necesito explicar las
+lineas de codigo para construir las dataframes o solemente la las
+dataframes
+
+## Resultados
+
+tables charts and graphs pictures of app
+
+
+## Discusión
+
+argument of analysis relevant sources from other articles important
+implications
+
+## Conclusión
+
+main findings are summarized problems with methodology improve studies
+research based recommendations for future studies
+
+## Agradecimientos
+
+complete and professionally written
+
+## Bibliografía
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax
+for authoring HTML, PDF, and MS Word documents. For more details on
+using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that
+includes both content as well as the output of any embedded R code
+chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to
+prevent printing of the R code that generated the plot.

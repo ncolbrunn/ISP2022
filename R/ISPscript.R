@@ -59,6 +59,8 @@ foodWebLocation2["Longitude"][foodWebLocation2["Network"] == "Caribbean Reef"] <
 foodWebLocation2$Longitude = (measurements::conv_unit(foodWebLocation2$Longitude, from = 'deg_min_sec', to = 'dec_deg') )
 foodWebLocation2$Latitude = (measurements::conv_unit(foodWebLocation2$Latitude, from = 'deg_min_sec', to = 'dec_deg') )
 foodWebLocation2$Ecosystem <- "Marino"
+foodWebLocation1 <- foodWebLocation1[order(foodWebLocation1$Network),]
+
 
 datalist <- calc_topological_indices(igcomplete)
 uniqueLocations <- (rbind(distinct(foodWebLocation1), distinct(foodWebLocation2))) %>%
@@ -67,10 +69,21 @@ uniqueLocations$Size <- datalist$Size
 uniqueLocations$Interactions <- datalist$Links
 uniqueLocations$popup_text <- paste0("<center><b>", uniqueLocations$Network,  "</b></br>", uniqueLocations$Ecosystem, "</center>")
 
+uniqueLocations$color <- "blue"
+uniqueLocations["color"][uniqueLocations["Ecosystem"] == "Marino"] <- "blue"
+uniqueLocations["color"][uniqueLocations["Ecosystem"] == "Terrestre"] <- "darkgreen"
+uniqueLocations["color"][uniqueLocations["Ecosystem"] == "Dulceacuícola"] <- "purple"
+
+load(file = "~/ISP/ISP2022/R/qssResults.rda")
+spData <- uniqueLocations
+spData$ME <- qssValues$MEing
+spData$Connectance <- datalist$Connectance
+
 #plot_troph_level(igcomplete[[290]])
 
 # tic()
-# calc_QSS(igcomplete[290], nsim = 1000)
+# print(calc_QSS(igcomplete[290], nsim = 1000, ncores = 8, istrength = FALSE, returnRaw = FALSE))
+# print(igcomplete[290])
 # toc()
 
 #load(file = "~/ISP/ISP2022/R/qssResults.rda")
