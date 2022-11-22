@@ -7,7 +7,7 @@ library(leaflet)
 library(measurements)
 
 #Setup first database as dataframe and format
-dat <- read.csv("283_3_283_2_FoodWebDataBase_2018_12_10.csv", header = TRUE, na.strings="NA")
+dat <- read.csv("../data/283_2_FoodWebDataBase_2018_12_10.csv", header = TRUE, na.strings="NA")
 foodWebDF <- dat %>% 
   dplyr::select(res.taxonomy, con.taxonomy, foodweb.name, longitude, latitude, ecosystem.type, study.site) %>% 
   dplyr::filter(!foodweb.name == "Carpinteria" ) %>%
@@ -74,7 +74,7 @@ uniqueLocations["color"][uniqueLocations["Ecosystem"] == "Marino"] <- "blue"
 uniqueLocations["color"][uniqueLocations["Ecosystem"] == "Terrestre"] <- "darkgreen"
 uniqueLocations["color"][uniqueLocations["Ecosystem"] == "Dulceacuícola"] <- "purple"
 
-load(file = "~/ISP/ISP2022/R/qssResults.rda")
+load(file = "qssResults.rda")
 spData <- uniqueLocations
 spData$ME <- qssValues$MEing
 spData$Connectance <- datalist$Connectance
