@@ -1,80 +1,262 @@
 ---
-title: "Title"
-subtitle: "Subtitle"
-author: "Nate Colbrunn, Tomàs Marino"
-date: "`r Sys.Date()`"
+title: "Las Locas Redes Tróficas"
+author: "Nate Colbrunn"
+date: "13 de diciembre, 2022"
 output:
   pdf_document: default
-editor_options: 
-  markdown: 
-    wrap: 72
+  word_document: default
+bibliography: Sources.bib
+subtitle: Un estudio de la relación entre complejidad y estabilidad en redes tróficas
 ---
 
+\newpage
+
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+library(multiweb)
+library(dplyr)
+library(ggplot2)
+library(ggpmisc)
+library(ggpubr)
+library(car)
+library(knitr)
+load(file = "spDataFile.rda")
+load(file = "data/igcomplete.rda")
 ```
 
 ## Resumen
 
-summary of paper, one or two paragraphs in english and spanish
-background objective hypothesis important results
+El estudio de la relación entre complejidad y estabilidad es una relación común a observar cómo los diferentes tipos de redes reaccionan a los cambios. Usé dos grandes bases de datos de interacciones entre especies en diferentes redes para construir diagramas de dispersión para ver la relación. Se produjeron resultados estadísticamente significativos al calcular la estabilidad con modularidad y al observar los ecosistemas de forma individual para todos excepto el ecosistema terrestre usando qss. hypothesis palabras claves
+
+## Abstract
+
+Studying the relationship between complexity and stability is a common relationship when looking at how different types of networks react to changes. I used two large databases of interactions between species in different networks to build scatterplots to see the relationship. Statistically significant results were produced by calculating stability with modularity and by looking at ecosystems individually for all but the terrestrial ecosystem using qss.
 
 ## Introdución
 
-relevant background info importance of work map of networks question/
-hypothesis general approach of study contextualized based on other
-scientist/ papers (extensive literature review) study question and
-hypothesis are relevant objective of study are clearly presented
+Las redes tróficas son sistemas de relaciones entre consumidores y recursos. En el pasado se entendía que existe una relación positiva entre la estabilidad y la complejidad. La complejidad se refiere a la cantidad de especies e interacciones y la estabilidad se refiere a la capacidad de permanecer en equilibrio. Un sistema es estable solo si puede volver a su equilibrio inicial después de eliminar una especie [@Pimm1984]. En 1972, May amplió el trabajo de Gardner y Ashby para encontrar la relación entre estos dos valores. Usó las matemáticas y matrices para determinar que las redes son menos estables a medida que aumenta su complejidad [@MAY1972]. La definición de estabilidad se define en la investigación de McCann. Explica que la estabilidad se define por su capacidad para desafiar el cambio a través de la resiliencia y la resistencia. McCann determinó que la diversidad no es el principal contribuyente a la estabilidad de las redes, sino contener una especie [@McCann2000]. Estos estudios produjeron resultados diferentes debido a sus definiciones de conectividad y estabilidad. En general, una buena comprensión de estas relaciones es importante para proteger las especies en los diferentes ecosistemas. Este estudio analiza la relación entre complejidad y estabilidad utilizando la conectividad, la modularidad y la estabilidad de QSS. La hipótesis es que existe una relación negativa entre estos factores. El aumento de la complejidad disminuye la estabilidad.
+
+![Figura 1. Ubicaciones geográficas de las redes tróficas analizadas.](Mapa2.png)
 
 ## Métodos
 
-explanation of methodology is clear, statistical analysis of data graphs
-/ tables Lines of code so anyone can replicate? Necesito explicar las
-lineas de codigo para construir las dataframes o solemente la las
-dataframes
+### Bases de datos
+
+Se utilizaron dos bases de datos. La primera base de datos se llama GATEWAy, recopilada por el German Center for Integrative Biodiversity Research (iDiv) [@Brose2018], y contiene información sobre 290 redes tróficas de todo el mundo. La otra base de datos está almacenada en el paquete de R 'multiweb'; contiene 30 redes del ecosistema marino. Las redes se clasificaron en tres ecosistemas distintos: marino, terrestre y dulceacuícola [@Saravia2022]. <https://github.com/globalbioticinteractions/brose-gateway> <https://github.com/lsaravia/multiweb>
+
+### Análisis de los datos
+
+Las dos bases de datos, GATEWAy y multiweb, se combinaron en una sola. Luego se importaron al lenguaje de programación R (@RCoreTeam2019), el cual se utilizó para el análisis de los datos. Los paquetes de R que se utilizaron fueron: igraph[@Csardi2006], multiweb[@Saravia2022], dplyr[@Wickham2022], ggplot2[@Wickham2016].
+
+Las redes tróficas, en formato de lista de interacciones, se convirtieron en un objeto R de tipo grafo utilizando el paquete 'igraph'. En el marco de la teoría de redes, el concepto de grafo se utiliza para representar de forma gráfica una red, donde las figuras (círculos en general) se refieren a los elementos de la red, especies en este caso, y las flechas indican las conexiones, interacciones presa-depredador para el caso de redes tróficas. Para calcular la complejidad, se utilizó la conectividad (C) de la red como indicador. La conectividad es la cantidad de interacciones reales divido por la cantidad de interacciones posibles (Pimm 1984):
+
+$$
+C=L/S^2
+$$ donde L es el numero de interacciones tróficas y S es el numero de especies (Cordone et al. 2020).
+
+Se utilizaron dos propiedades para estimar la estabilidad de las redes tróficas: modularidad y "Quasi-Sign Stability" (QSS). La modularidad es la fuerza de las interacciones de subgrupos específicos en comparación con otros. Se utilizó la siguiente ecuación para calcular modularidad: $$
+M = \Sigma_s I_s/L-(d_s/2L)
+$$ donde s es el numero de módulos, es el numero de conexiones entre especies y, es la suma de grados de todas las especies en un modulo s, y L es el numero de todas las conexiones [@Krause2003]. La propiedad "Quasi-Sign Stability" se define como la comparación de la estabilidad de matrices aleatorias y estables. Es "sign-stable" porque mantiene el signo de los coeficientes de la matriz, siendo positivo para el depredador y negativo para la presa [@Allesina2007]. Se utilizó una función del paquete 'multiweb' que produce dos valores: 1) proporción de matrices estables; y 2) promedio de los autovalores de las matrices. Se utilizó este último como medida, porque permite ver mejor la diferencia entre redes. Se hicieron 1000 simulaciones para obtener resultados robustos.
+
+### Página interactiva
+
+Definir y describir la shiny app. Con un dataframe apropiado se pueden crear diagramas de dispersión para mostrar la relación entre complejidad y estabilidad. Con esta información se creó una página web interactiva. Aquí se muestra un mapa con las localizaciones de todas las redes tróficas. Todos los diagramas de dispersión, y información sobre cada red. measurements[@Birk2019], shiny[@Chang2022], shinydashboard[@Chang2021], shinyWidgets[@Perrier2022], leaflet[@Cheng2022], DT[@Xie2022],
+
+El código de R que se utilizó para el análisis de los datos se encuentra en el siguiente repositorio público de GitHub: <https://github.com/ncolbrunn/ISP2022>
 
 ## Resultados
 
-tables charts and graphs pictures of app
+La bases de datos analizada se compone de 319 redes tróficas de tres ecosistemas distintos: 163 ecosistemas marinos, 73 ecosistemas terrestres y 83 ecosistemas dulceacuícolas. En promedio las redes tienen una conectividad de 0,1302, una modularidad de 0,241 y 3,28 con respecto al QSS.
 
+```{r allME, echo=FALSE}
+ggplot(spData, aes(x = Connectance, y = ME)) +
+  geom_point(aes(color = Ecosystem)) +
+  #stat_poly_eq(aes(label = paste(after_stat(eq.label), sep = "*\", \"*"))) +
+  xlab("Complejidad") +
+  ylab("+ Estabilidad(QSS) -") +
+  labs(color = "Ecosistema") +
+  geom_smooth(method = "lm", color="black") +
+  theme_classic(base_line_size = 1)
+
+```
+
+**Figura #.** Diagrama de dispersión que muestra la relación entre la complejidad (conectividad) y la estabilidad calculada usando QSS. La línea de regresión es $y = 3,78 - 3,77x$ $(p = 0,131)$. Los puntos rojos representan el ecosistema dulceacuícola, el verde representa marino, y el azul representa terrestre.
+
+```{r allMEtable, echo=FALSE, eval = FALSE}
+model <- lm(ME ~ Connectance, data = spData)
+sstable <- Anova(model, type = 3)
+kable(sstable, digits = 3)
+```
+
+**Tabla #.** Tabla ANOVA que muestra la significación estadística de la relación entre la complejidad (conectividad) y la estabilidad calculada usando QSS. Tiene un PAG valor igual a 0,131 y un valor F igual a 2,293. \### si esta bien, agregaria al resto
+
+```{r allMOD, echo=FALSE}
+ggplot(spData, aes(x = Connectance, y = MOD)) +
+            geom_point(aes(color = Ecosystem), show.legend = FALSE) +
+            xlab("Complejidad") +
+            ylab("- Estabilidad(Mod) +") +
+            labs(color = "Ecosistema") +
+            stat_cor(label.x = 0, label.y = .5) +
+            geom_smooth(method = "lm", color="black")
+model <- lm(MOD ~ Connectance, data = spData)
+sstable <- Anova(model, type = 3)
+kable(sstable, digits = 3)
+
+```
+
+**Figura #.** Diagrama de dispersión que muestra la relación entre la complejidad (conectividad) y la estabilidad calculada usando modularidad (Mod). La línea de regresión es $y = 0,399 - 1.21x$. Los puntos rojos representan el ecosistema dulceacuícola, los verdes representa marino, y los azules representa terrestre.
+
+```{r marino, echo=FALSE, eval = FALSE}
+splitData <- spData %>% dplyr::filter(Ecosystem == "Marino")
+ggplot(splitData, aes(x = Connectance, y = ME)) +
+  ggtitle("A") +
+  geom_point(aes(color = Ecosystem), show.legend = FALSE) +
+  xlab("Complejidad") +
+  ylab("+ Estabilidad(QSS) -") +
+  stat_cor(label.x = 0, label.y = .5) +
+  geom_smooth(method = "lm", color="black")
+
+```
+
+**Figura #.** Diagrama de dispersión que muestra la relación entre la complejidad (conectividad) y la estabilidad calculada usando QSS para las redes tróficas del ecosistema marino. La línea de regresión es $y = 3,52 - 6.6x$.
+
+```{r marino2, echo=FALSE, eval = FALSE}
+ggplot(splitData, aes(x = Connectance, y = MOD)) +
+  ggtitle("B") +
+  geom_point(aes(color = "darkgreen"), show.legend = FALSE) +
+  xlab("Complejidad") +
+  ylab("- Estabilidad(Mod) +") +
+  stat_cor(label.x = 0, label.y = .5) +
+  geom_smooth(method = "lm", color="black")
+
+```
+
+**Figura #.** Diagrama de dispersión que muestra la relación entre la complejidad (conectividad) y la estabilidad calculada usando modularidad (Mod) para las redes tróficas del ecosistema marino. La línea de regresión es $y = 0,382 - 1,13x$.
+
+```{r terrestre, figures-side, fig.show="hold", out.width="35%", echo=FALSE}
+splitData <- spData %>% 
+              dplyr::filter(Ecosystem == "Terrestre")
+ggplot(splitData, aes(x = Connectance, y = (1-ME))) +
+  ggtitle("Terrestre") +
+  geom_point(aes(color = "blue"), show.legend = FALSE) +
+  xlab("") +
+  ylab("- Estabilidad(QSS) +") +
+  #stat_cor(label.x = 0, label.y = .5) +
+  theme_classic(base_line_size = 1) +
+  geom_smooth(method = "lm", color="black")
+
+splitData <- spData %>% 
+              dplyr::filter(Ecosystem == "Dulceacuícola")
+ggplot(splitData, aes(x = Connectance, y = (1-ME))) +
+  ggtitle("Dulceacuícola") +
+  geom_point(aes(colour = "green"), show.legend = FALSE) +
+  xlab("") +
+  ylab("") +
+  #stat_cor(label.x = 0, label.y = .5) +
+  theme_classic(base_line_size = 1) +
+  geom_smooth(method = "lm", color="black")
+
+splitData <- spData %>% dplyr::filter(Ecosystem == "Marino")
+ggplot(splitData, aes(x = Connectance, y = (1-ME))) +
+  ggtitle("Marino") +
+  geom_point(aes(color = Ecosystem), show.legend = FALSE) +
+  xlab("") +
+  ylab("") +
+  #stat_cor(label.x = 0, label.y = .5) +
+  theme_classic(base_line_size = 1) +
+  geom_smooth(method = "lm", color="black")
+
+splitData <- spData %>% 
+              dplyr::filter(Ecosystem == "Terrestre")
+ggplot(splitData, aes(x = Connectance, y = MOD)) +
+  #ggtitle("Mod") +
+  geom_point(aes(color = "blue"), show.legend = FALSE) +
+  xlab("Complejidad") +
+  ylab("- Estabilidad(MOD) +") +
+  #stat_cor(label.x = 0, label.y = .5) +
+  theme_classic(base_line_size = 1) +
+  geom_smooth(method = "lm", color="black")
+splitData <- spData %>% 
+              dplyr::filter(Ecosystem == "Dulceacuícola")
+ggplot(splitData, aes(x = Connectance, y = MOD)) +
+  #ggtitle("A") +
+  geom_point(aes(colour = "green"), show.legend = FALSE) +
+  xlab("Complejidad") +
+  ylab("") +
+  #stat_cor(label.x = 0, label.y = .5) +
+  theme_classic(base_line_size = 1) +
+  geom_smooth(method = "lm", color="black")
+
+splitData <- spData %>% dplyr::filter(Ecosystem == "Marino")
+ggplot(splitData, aes(x = Connectance, y = MOD)) +
+  #ggtitle("Marino") +
+  geom_point(aes(color = Ecosystem), show.legend = FALSE) +
+  xlab("Complejidad") +
+  ylab("") +
+  #stat_cor(label.x = 0, label.y = .5) +
+  theme_classic(base_line_size = 1) +
+  geom_smooth(method = "lm", color="black")
+```
+
+**Figura #.** Diagramas de dispersión que muestran la relación entre complejidad (conectividad) y estabilidad calculada usando (A) QSS y (B) modularidad para las redes tróficas del ecosistema terrestre. Las líneas de regresión son $y = 5,79 - 2,65x$ (A) y $y = 0,382 - 0,884x$ (B).
+
+```{r terr2, echo=FALSE, eval = FALSE}
+ggplot(splitData, aes(x = Connectance, y = MOD)) +
+  ggtitle("B") +
+  geom_point(aes(color = "blue"), show.legend = FALSE) +
+  xlab("Complejidad") +
+  ylab("- Estabilidad(Mod) +") +
+  stat_cor(label.x = 0, label.y = .5) +
+  geom_smooth(method = "lm", color="black")
+
+```
+
+```{r da, echo=FALSE, eval = FALSE}
+splitData <- spData %>% 
+              dplyr::filter(Ecosystem == "Dulceacuícola")
+ggplot(splitData, aes(x = Connectance, y = ME)) +
+  ggtitle("A") +
+  geom_point(aes(colour = "green"), show.legend = FALSE) +
+  xlab("Complejidad") +
+  ylab("+ Estabilidad(QSS) -") +
+  stat_cor(label.x = 0, label.y = .5) +
+  geom_smooth(method = "lm", color="black")
+
+```
+
+```{r da2, echo=FALSE, eval = FALSE}
+ggplot(splitData, aes(x = Connectance, y = MOD)) +
+  ggtitle("B") +
+  geom_point(aes(color = "red"), show.legend = FALSE) +
+  xlab("Complejidad") +
+  ylab("- Estabilidad(Mod) +") +
+  stat_cor(label.x = 0, label.y = .5) +
+  geom_smooth(method = "lm", color="black")
+
+```
+
+**Figura #.** Diagramas de dispersión que muestran la relación entre complejidad (conectividad) y estabilidad calculada usando (A) QSS y (B) modularidad para las redes tróficas del ecosistema dulceacuícola. Las líneas de regresión son $y = 0,103 - 17,8$ (A) y $y = 0,403 - 1,29x$ (B).
+
+### Ejemplos específicos
+
+Ejemplo de red poco compleja: Gulf Alasksa screenshot de app **Figura #.** La red trófica de "Gulf Alaska" tiene 405 especies y 1057 interacciones, con una conectividad de 0,006. La estabilidad QSS es 0,375, y la modularidad es 3,057.
+
+Ejemplo de red muy compleja: Skipwith Pond Agregar otra screenshot de app **Figura #.** La red trófica "Skipwith Pond" tiene 34 especies y 364 interacciones, con una conectividad de 0,315. La estabilidad QSS es 3,874, y la modularidad es 0,085.
 
 ## Discusión
 
-argument of analysis relevant sources from other articles important
-implications
+comparasion de resulatods y explicacion argument of analysis relevant sources from other articles important implications
+
+the work of cadic investigators [@Rodriguez2022] closly examines two networks greatly effected by climate change. sub antartic marine food webs possible alterations is due to large number of omniveres because they can adapt quickly to changes.
 
 ## Conclusión
 
-main findings are summarized problems with methodology improve studies
-research based recommendations for future studies
+Esotos resultados muestran que un pequeño cambio en una red puede generar grandes efectos negativos. Aspectos como el cambio climático, las especies invasoras, la caza furtiva y las actividades humanas que conducen a la destrucción de los hábitats causar la disminución de la biodiversidad. Esto causará menos interacciones y redes menos estables. Por eso, debemos proteger a todas las especies y no solo a las en peligro de extinción. No tuve grandes errores durante la investigacion. Las bases de datos no eran perfectas y tenían algunos pequeños errores, incluyendo latitudes incorrectas para la red de Caribbean Reef o redes con más de un ecosistema. Solucioné estos errores aunque es posible que haya errores en los datos. Confié mucho en los scripts y funciones para clasificar los datos y clasificarlos debido a la gran cantidad de interacciones. Esto eliminó la mayoría de la posibilidad de un error humano pero produjo la posibilidad de un error informático. Para futuros estudios podemos agregar más variables para recibir resultados más precisos. Este estudio solo analizó la existencia de interacciones, Saravia recomienda que también consideremos las fortalezas de las interacciones [@Saravia2022]. Además, el valor de conectividad utilizado no considera que pueda existir una relación entre el número de especies y la estabilidad. Pimm concluyó que una red con más especies requiere menos conexiones para ser estable, por lo que sería beneficioso un estudio adicional que incluya el número de especies [@Pimm1984].
 
 ## Agradecimientos
 
-complete and professionally written
+Agradezco a Tomás Marina por la orientación y ayuda con todo el proyecto. Agradezco a los investigadores que obtuvieron todos los datos. Agradezco a María Gowland, Violeta Compan, Lida Pimper y SIT por la oportunidad.
 
-## Bibliografía
+\newpage
 
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax
-for authoring HTML, PDF, and MS Word documents. For more details on
-using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that
-includes both content as well as the output of any embedded R code
-chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
-```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to
-prevent printing of the R code that generated the plot.
+## Referencias
